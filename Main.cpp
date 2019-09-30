@@ -22,7 +22,7 @@ void moveEye(ImageOf<PixelRgb> *image) {
 			PixelRgb& pixel = image->pixel(x,y);
 			// very simple test for blueishness
 			// make sure blue level exceeds red and green by a factor of 2
-			if (pixel.b>pixel.r*1.2+10 && pixel.b>pixel.g*1.2+10) {
+			if (pixel.r>pixel.b*1.2+10 && pixel.r>pixel.g*1.2+10) {
 				// there's a blueish pixel at (x,y)!
 				// let's find the average location of these pixels
 				xMean += x;
@@ -45,17 +45,17 @@ void moveEye(ImageOf<PixelRgb> *image) {
 		double vx = x*0.1;
 		double vy = -y*0.1;
 		if (conf > 0.5) {
-			std::cout << -vx << " -- " << vy << std::endl;
-			event.fire("move eye x", -vx);
+			std::cout << vx << " -- " << vy << std::endl;
+			event.fire("move eye x", vx);
 			event.fire("move eye y", vy);
 			if (vx > 0)
-				event.fire("add head x", -0.1);
+				event.fire("add head x", -1);
 			else if (vx < 0)
-				event.fire("add head x", 0.1);
+				event.fire("add head x", 1);
 			if (-vy > 0)
-				event.fire("add head y", -0.1);
+				event.fire("add head y", -1);
 			else if (-vy < 0)
-				event.fire("add head y", 0.1);
+				event.fire("add head y", 1);
 		}
 	} else {
 
@@ -71,7 +71,7 @@ int main() {
 	event.fire("saved arm left", std::string("bronchade"));
 	event.fire("saved arm right", std::string("bronchade"));
 
-	event.addEvent<ImageOf<PixelRgb>*>("image left eye", moveEye);
+	event.addEvent<ImageOf<PixelRgb>*>("image right eye", moveEye);
 
 	while (true) {
 		event.fire("update");

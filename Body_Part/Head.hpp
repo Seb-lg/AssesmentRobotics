@@ -7,6 +7,8 @@
 
 #include "Eye.hpp"
 
+#include <memory>
+
 #include <yarp/dev/all.h>
 
 using namespace yarp::dev;

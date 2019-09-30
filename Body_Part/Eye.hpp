@@ -25,6 +25,7 @@ public:
 	void moveY(double angle);
 
 private:
+void test();
 	std::string eye;
 	BufferedPort<ImageOf<PixelRgb> > imagePort;
 	ImageOf<PixelRgb> *image;
