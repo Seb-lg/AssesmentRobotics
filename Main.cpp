@@ -6,6 +6,7 @@
 
 #include "EventLibrary.hpp"
 #include "Robot.hpp"
+#include "face_detection/face_detection.hpp"
 
 using namespace yarp::os;
 using namespace yarp::sig;
@@ -65,13 +66,36 @@ void moveEye(ImageOf<PixelRgb> *image) {
 int main() {
 	Network yarp; // set up yarp
 	Robot icub;
+	FaceDetection detect;
 
 	//icub.head.moveHeadZ(60);
 
 	event.fire("saved arm left", std::string("bronchade"));
 	event.fire("saved arm right", std::string("bronchade"));
 
-	event.addEvent<ImageOf<PixelRgb>*>("image right eye", moveEye);
+	event.addEvent<int, int>("look at position", [](int xMean, int yMean){
+		std::cout << "I can see your face at : " << xMean << " " << yMean << std::endl;
+		double x = xMean;
+		double y = yMean;
+		x -= (double)320/2.0;
+		y -= (double)240/2.0;
+		double vx = x*0.1;
+		double vy = -y*0.1;
+		if (1) {
+			std::cout << vx << " -- " << vy << std::endl;
+			event.fire("move eye x", vx);
+			event.fire("move eye y", vy);
+			if (vx > 0)
+				event.fire("add head x", -1);
+			else if (vx < 0)
+				event.fire("add head x", 1);
+			if (-vy > 0)
+				event.fire("add head y", -1);
+			else if (-vy < 0)
+				event.fire("add head y", 1);
+		}
+	});
+	//event.addEvent<ImageOf<PixelRgb>*>("image right eye", moveEye);
 
 	while (true) {
 		event.fire("update");
