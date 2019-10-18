@@ -68,10 +68,22 @@ int main() {
 
 	//icub.head.moveHeadZ(60);
 
-	event.fire("saved arm left", std::string("bronchade"));
-	event.fire("saved arm right", std::string("bronchade"));
+	//event.fire("saved arm left", std::string("bronchade"));
+	//event.fire("saved arm right", std::string("bronchade"));
 
 	event.addEvent<ImageOf<PixelRgb>*>("image right eye", moveEye);
+	event.addEvent<ImageOf<PixelRgb>*>("image right eye", [](ImageOf<PixelRgb>* img){
+		ImageOf<PixelRgb>* image = new ImageOf<PixelRgb>(*img);
+		std::cout << (int)image->pixel(0,0).r << std::endl;
+		for (int x=0; x<image->width(); x++) {
+			for (int y=0; y<image->height(); y++) {
+				PixelRgb& pixel = image->pixel(x,y);
+				pixel.r = pixel.g = pixel.b = (int)(pixel.r + pixel.g + pixel.b);
+			}
+		}
+		std::cout << (int)image->pixel(0,0).r << std::endl << std::endl;
+		event.fire("grey right", image);
+	});
 
 	while (true) {
 		event.fire("update");
