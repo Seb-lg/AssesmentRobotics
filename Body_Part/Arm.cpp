@@ -75,7 +75,8 @@ void Arm::setSavedArm() {
 	auto &flip = savedArmPosition["flip"];
 	flip.resize(jnts);
 	int i = 0;
-	flip[i++] = -74;
+	//flip[i++] = -74;
+	flip[i++] = 10;
 	flip[i++] = 11;
 	flip[i++] = 11;
 	flip[i++] = 105;

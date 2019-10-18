@@ -6,6 +6,7 @@
 
 #include "EventLibrary.hpp"
 #include "Robot.hpp"
+#include "face_detection/face_detection.hpp"
 
 using namespace yarp::os;
 using namespace yarp::sig;
@@ -45,17 +46,16 @@ void moveEye(ImageOf<PixelRgb> *image) {
 		double vx = x*0.1;
 		double vy = -y*0.1;
 		if (conf > 0.5) {
-			std::cout << vx << " -- " << vy << std::endl;
 			event.fire("move eye x", vx);
 			event.fire("move eye y", vy);
-			if (vx > 0)
-				event.fire("add head x", -1);
-			else if (vx < 0)
-				event.fire("add head x", 1);
-			if (-vy > 0)
-				event.fire("add head y", -1);
-			else if (-vy < 0)
-				event.fire("add head y", 1);
+			if (vx > 0.0)
+				event.fire("add head x", -1.0);
+			else if (vx < 0.0)
+				event.fire("add head x", 1.0);
+			if (-vy > 0.0)
+				event.fire("add head y", -1.0);
+			else if (-vy < 0.0)
+				event.fire("add head y", 1.0);
 		}
 	} else {
 
@@ -65,25 +65,35 @@ void moveEye(ImageOf<PixelRgb> *image) {
 int main() {
 	Network yarp; // set up yarp
 	Robot icub;
+	FaceDetection detect;
 
 	//icub.head.moveHeadZ(60);
 
-	//event.fire("saved arm left", std::string("bronchade"));
-	//event.fire("saved arm right", std::string("bronchade"));
+	event.fire("saved arm left", std::string("flip"));
+	event.fire("saved arm right", std::string("flip"));
 
-	event.addEvent<ImageOf<PixelRgb>*>("image right eye", moveEye);
-	event.addEvent<ImageOf<PixelRgb>*>("image right eye", [](ImageOf<PixelRgb>* img){
-		ImageOf<PixelRgb>* image = new ImageOf<PixelRgb>(*img);
-		std::cout << (int)image->pixel(0,0).r << std::endl;
-		for (int x=0; x<image->width(); x++) {
-			for (int y=0; y<image->height(); y++) {
-				PixelRgb& pixel = image->pixel(x,y);
-				pixel.r = pixel.g = pixel.b = (int)(pixel.r + pixel.g + pixel.b);
-			}
+	event.addEvent<int, int>("look at position", [](int xMean, int yMean){
+		std::cout << "I can see your face at : " << xMean << " " << yMean << std::endl;
+		double x = xMean;
+		double y = yMean;
+		x -= (double)320/2.0;
+		y -= (double)240/2.0;
+		double vx = x*0.1;
+		double vy = -y*0.1;
+		if (1) {
+			event.fire("move eye x", vx);
+			event.fire("move eye y", vy);
+			if (vx > 0)
+				event.fire("add head x", -0.1);
+			else if (vx < 0)
+				event.fire("add head x", 0.1);
+			if (-vy > 0)
+				event.fire("add head y", -0.1);
+			else if (-vy < 0)
+				event.fire("add head y", 0.1);
 		}
-		std::cout << (int)image->pixel(0,0).r << std::endl << std::endl;
-		event.fire("grey right", image);
 	});
+	//event.addEvent<ImageOf<PixelRgb>*>("image right eye", moveEye);
 
 	while (true) {
 		event.fire("update");
