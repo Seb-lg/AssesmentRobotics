@@ -69,47 +69,47 @@ void Arm::rotateHandLeftRight(double angle) {
 }
 
 void Arm::setSavedArm() {
-	int jnts = 0;
+	int jnts, i = 0;
 	pos->getAxes(&jnts);
 
-	auto &flip = savedArmPosition["flip"];
-	flip.resize(jnts);
-	int i = 0;
-	//flip[i++] = -74;
-	flip[i++] = 10;
-	flip[i++] = 11;
-	flip[i++] = 11;
-	flip[i++] = 105;
-	flip[i++] = -88;
-	flip[i++] = 0;
-	flip[i++] = 0;
-	flip[i++] = 60;
-	flip[i++] = 90;
-	flip[i++] = 0;
-	flip[i++] = 180;
-	flip[i++] = 90;
-	flip[i++] = 180;
-	flip[i++] = 0;
-	flip[i++] = 0;
-	flip[i++] = 270;
-
-	auto &bronchade = savedArmPosition["bronchade"];
-	bronchade.resize(jnts);
+	auto &momove = savedArmPosition["wave"];
+	momove.resize(jnts);
 	i = 0;
-	bronchade[i++] = -15;
-	bronchade[i++] = 11;
-	bronchade[i++] = 0;
-	bronchade[i++] = 16;
-	bronchade[i++] = 0;
-	bronchade[i++] = 0;
-	bronchade[i++] = 0;
-	bronchade[i++] = 60;
-	bronchade[i++] = 59;
-	bronchade[i++] = 0;
-	bronchade[i++] = 99;
-	bronchade[i++] = 57;
-	bronchade[i++] = 115;
-	bronchade[i++] = 0;
-	bronchade[i++] = 52;
-	bronchade[i++] = 21;
+	momove[i++] = -76;
+	momove[i++] = 32;
+	momove[i++] = 0;
+	momove[i++] = 85;
+	momove[i++] = 68;
+	momove[i++] = -29;
+	momove[i++] = 0;
+	momove[i++] = 55;
+	momove[i++] = 26;
+	momove[i++] = 90;
+	momove[i++] = 0;
+	momove[i++] = 0;
+	momove[i++] = 0;
+	momove[i++] = 0;
+	momove[i++] = 0;
+	momove[i++] = 0;
+
+	auto &mocatch = savedArmPosition["catch"];
+	mocatch.resize(jnts);
+	i = 0;
+	mocatch[i++] = -44;
+	mocatch[i++] = 160;
+	mocatch[i++] = 23;
+	mocatch[i++] = 56;
+	mocatch[i++] = -90;
+	mocatch[i++] = -3;
+	mocatch[i++] = 7;
+	mocatch[i++] = 53;
+	mocatch[i++] = 27;
+	mocatch[i++] = 70;
+	mocatch[i++] = 0;
+	mocatch[i++] = 0;
+	mocatch[i++] = 0;
+	mocatch[i++] = 0;
+	mocatch[i++] = 0;
+	mocatch[i++] = 0;
+
 }

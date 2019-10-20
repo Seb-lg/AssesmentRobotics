@@ -6,6 +6,7 @@
 #include <yarp/os/BufferedPort.h>
 #include <yarp/sig/Image.h>
 #include <iostream>
+#include "../include/Cv.h"
 
 using namespace std;
 using namespace cv;
