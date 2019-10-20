@@ -14,12 +14,19 @@ EventLibrary event;
 
 void moveEye(ImageOf<PixelRgb> *image) {
 	//printf("We got an image of size %dx%d\n", image->width(), image->height());
+	ImageOf<PixelRgb> grey(*image);
+	for (int x=0; x<grey.width(); x++) {
+		for (int y=0; y<grey.height(); y++) {
+
+		}
+	}
+
 	double xMean = 0;
 	double yMean = 0;
 	int ct = 0;
 	for (int x=0; x<image->width(); x++) {
 		for (int y=0; y<image->height(); y++) {
-			PixelRgb& pixel = image->pixel(x,y);
+			PixelRgb& pixel = image->pixs	el(x,y);
 			// very simple test for blueishness
 			// make sure blue level exceeds red and green by a factor of 2
 			if (pixel.b>pixel.r*1.2+10 && pixel.b>pixel.g*1.2+10) {
