@@ -17,10 +17,6 @@
 
 Head::Head():left("left"), right("right") {
 	event.addEvent("update", [this](){this->update();});
-	event.addEvent("clear head", [this](){
-		for (auto &muscle: muscles)
-			muscle = 0;
-	});
 
 	event.addEvent<double>("move eye x", [this](double angle){this->muscles[4] = angle;});
 	event.addEvent<double>("move eye y", [this](double angle){this->muscles[3] = angle;});
@@ -46,8 +42,14 @@ Head::Head():left("left"), right("right") {
 	int jnts = 0;
 	pos->getAxes(&jnts);
 	muscles.resize(jnts);
-	for (auto &muscle: muscles)
-		muscle = 0;
+	for (int i = 0; i < jnts; ++i)
+		muscles[i] = 0;
+
+
+	event.addEvent("clear head", [this, jnts](){
+		for (int i = 0; i < jnts; ++i)
+			muscles[i] = 0;
+	});
 }
 
 void Head::update() {

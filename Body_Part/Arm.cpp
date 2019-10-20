@@ -23,15 +23,15 @@ Arm::Arm(std::string const &arm) {
 	int jnts = 0;
 	pos->getAxes(&jnts);
 	muscles.resize(jnts);
-	for (auto &muscle: muscles)
-		muscle = 0;
+	for (int i = 0; i < jnts; ++i)
+		muscles[i] = 0;
 
 	event.addEvent("update", [this](){
 		pos->positionMove(muscles.data());
 	});
-	event.addEvent("random " + arm, [this](){
-		for (auto &muscle : muscles)
-			muscle = rand() % 360 - 180;
+	event.addEvent("random " + arm, [this, jnts](){
+		for (int i = 0; i < jnts; ++i)
+			muscles[i] = rand() % 360 - 180;
 	});
 	event.addEvent<std::string>("saved arm " + arm, [this](std::string saved){
 		if (savedArmPosition.find(saved) != savedArmPosition.end())
@@ -75,7 +75,8 @@ void Arm::setSavedArm() {
 	auto &flip = savedArmPosition["flip"];
 	flip.resize(jnts);
 	int i = 0;
-	flip[i++] = -74;
+	//flip[i++] = -74;
+	flip[i++] = 10;
 	flip[i++] = 11;
 	flip[i++] = 11;
 	flip[i++] = 105;

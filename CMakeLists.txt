@@ -12,10 +12,11 @@ set(CMAKE_CXX_STANDARD 17)
 
 # Find YARP.  Point the YARP_DIR environment variable at your build.
 find_package(YARP REQUIRED)
+find_package( OpenCV REQUIRED )
 
 # Search for source code.
-file(GLOB folder_source *.cpp Body_Part/*.cpp)
-file(GLOB folder_header *.hpp Body_Part/*.hpp)
+file(GLOB folder_source *.cpp Body_Part/*.cpp face_detection/*.cpp)
+file(GLOB folder_header *.hpp Body_Part/*.hpp face_detection/*.hpp include/*.h)
 
 # Search for IDL files.
 file(GLOB idl_files *.thrift *.msg *.srv)
@@ -35,6 +36,7 @@ endforeach(header_file ${folder_header})
 if(folder_source)
   add_executable(${PROJECT_NAME} ${folder_source} ${folder_header})
   target_link_libraries(${PROJECT_NAME} ${YARP_LIBRARIES})
+  target_link_libraries( ${PROJECT_NAME} ${OpenCV_LIBS} )
 else()
   message(FATAL_ERROR "No source code files found. Please add something")
 endif()
