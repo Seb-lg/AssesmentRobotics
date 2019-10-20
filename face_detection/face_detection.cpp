@@ -1,3 +1,5 @@
+// Created by Lucia
+
 #include "face_detection.hpp"
 #include "../EventLibrary.hpp"
 
@@ -42,7 +44,7 @@ void FaceDetection::detectAndDraw(ImageOf<PixelRgb>* point, Mat& img, CascadeCla
                                     CV_RGB(255,0,0),
                                     CV_RGB(255,0,255)} ;
   
-  // resizes and applies grey on imgae for methods work easier 
+  // resizes and applies gray on image for methods work easier - linear filter approach.
 
   Mat gray, smallImg( cvRound (img.rows/scale), cvRound(img.cols/scale), CV_8UC1 );
   
@@ -64,7 +66,9 @@ void FaceDetection::detectAndDraw(ImageOf<PixelRgb>* point, Mat& img, CascadeCla
   //----------------
   cv::vector<cv::Vec3f> circles = detect_circle(img, &lookXPos, &lookYPos);
 
-  //std::cout << circles.size() << " __ " << faces.size() << std::endl;
+  // Object detection. Full code detects faces and circles. We created some if/for loops so to make the robot
+  // look at the position of where the face or object (circular) is. When both are in the image, 
+  // we decided our robot will look (eyes + face) towards the human face.
 
   if(circles.empty() && faces.empty()){
      lookXPos = 320 / 2;
@@ -108,6 +112,10 @@ void FaceDetection::detectAndDraw(ImageOf<PixelRgb>* point, Mat& img, CascadeCla
 
     }
   }
+
+   // Create a port where we will load this information (detected faces) so after we can see it in a yarpview window
+  // We just made a change that for every pixel of rgb will point to the position in the img of opencv 
+  // (vector of matrix used in openCV images).
   ImageOf<PixelRgb> &tmp = facePort.prepare();
   for (int x = 0; x < 320; ++x) {
     for (int y = 0; y < 240; ++y) {
@@ -123,7 +131,6 @@ void FaceDetection::detectAndDraw(ImageOf<PixelRgb>* point, Mat& img, CascadeCla
 
 cv::vector<cv::Vec3f> FaceDetection::detect_circle(Mat& image, double *xPos, double *yPos){
 	cv::Mat img_gray;
-//	cv::Mat src = yarp::cv::toCvMat(*image);
 	cvtColor(image, img_gray, CV_BGR2GRAY);
 	GaussianBlur( img_gray, img_gray, cv::Size(1, 1), 2, 2 );
 	cv::vector<cv::Vec3f> circles;
