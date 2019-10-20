@@ -4,5 +4,6 @@
 
 #include "Robot.hpp"
 
+/// Made by Sébastien
 Robot::Robot() : leftArm("left"), rightArm("right") {
 }

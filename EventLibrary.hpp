@@ -10,6 +10,11 @@
 #include <functional>
 #include <iostream>
 
+/**
+	Class of Event Manager
+	Author: Sébastien LE GALL
+**/
+
 class EventLibrary {
 public:
 	EventLibrary() = default;

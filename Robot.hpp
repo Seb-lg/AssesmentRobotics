@@ -8,6 +8,12 @@
 #include <Arm.hpp>
 #include "Head.hpp"
 
+/**
+	Class of Robot interface
+	Author: Sébastien LE GALL
+**/
+
+/// Main class of the robot interface that contain
 class Robot {
 public:
 	Robot();

@@ -78,17 +78,20 @@ int main() {
 	/// set the event listener that will look at a given position
 	event.addEvent<int, int>("look at position", [](int xMean, int yMean){
 		std::cout << "I look at position : " << xMean << " " << yMean << std::endl;
-		/// change the abscissa and ordinate to the center of the image
 		double x = xMean;
 		double y = yMean;
+		/// change the abscissa and ordinate to the center of the image
 		/// 320 is the width of the image and 240 is the height
 		x -= (double)320/2.0;
 		y -= (double)240/2.0;
 		double vx = x*0.1;
 		double vy = -y*0.1;
 
+		/// Move the eye to look at the position
 		event.fire("move eye x", vx);
 		event.fire("move eye y", vy);
+
+		/// Slowly move the eye set the eye position to the center of the image
 		if (vx > 0)
 			event.fire("add head x", -0.1);
 		else if (vx < 0)
