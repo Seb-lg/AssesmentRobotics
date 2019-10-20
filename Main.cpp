@@ -75,12 +75,6 @@ int main() {
 	Robot icub;	// set up the robot interface
 	FaceDetection detect; // set up detecion
 
-	//icub.head.moveHeadZ(60);
-
-	// load saved arm gesture for both arms
-	event.fire("saved arm left", std::string("bronchade"));
-	event.fire("saved arm right", std::string("bronchade"));
-
 	/// set the event listener that will look at a given position
 	event.addEvent<int, int>("look at position", [](int xMean, int yMean){
 		std::cout << "I look at position : " << xMean << " " << yMean << std::endl;

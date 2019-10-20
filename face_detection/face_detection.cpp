@@ -1,3 +1,5 @@
+// Created by Lucia
+
 #include "face_detection.hpp"
 #include "../EventLibrary.hpp"
 
@@ -41,7 +43,7 @@ void FaceDetection::detectAndDraw(ImageOf<PixelRgb> *point, Mat &img, CascadeCla
 					CV_RGB(255, 0, 0),
 					CV_RGB(255, 0, 255)};
 
-	// resizes and applies grey on image for methods work easier
+	// resizes and applies gray on image for methods work easier - linear filter approach.
 
 	Mat gray, smallImg(cvRound(img.rows / scale), cvRound(img.cols / scale), CV_8UC1);
 
@@ -49,6 +51,9 @@ void FaceDetection::detectAndDraw(ImageOf<PixelRgb> *point, Mat &img, CascadeCla
 	resize(gray, smallImg, smallImg.size(), 0, 0, INTER_LINEAR);
 	equalizeHist(smallImg, smallImg);
 
+	// Object detection. Full code detects faces and circles. We created some if/for loops so to make the robot
+	// look at the position of where the face or object (circular) is. When both are in the image,
+	// we decided our robot will look (eyes + face) towards the human face.
 	t = (double) cvGetTickCount();
 	cascade.detectMultiScale(smallImg, faces,
 				 1.1, 2, 0
@@ -75,7 +80,7 @@ void FaceDetection::detectAndDraw(ImageOf<PixelRgb> *point, Mat &img, CascadeCla
 		lookYPos = 240 / 2;
 		event.fire("look at position", (int) lookXPos, (int) lookYPos);
 	}
-	//State 2 : If a face is detected -- draw a circle for each face detected and look at the last face detected
+		//State 2 : If a face is detected -- draw a circle for each face detected and look at the last face detected
 	else if (!faces.empty()) {
 		//Draw Circle on the output image
 		Point center;
@@ -91,10 +96,8 @@ void FaceDetection::detectAndDraw(ImageOf<PixelRgb> *point, Mat &img, CascadeCla
 		}
 		event.fire("look at position", center.x, center.y);
 		event.fire("saved arm left", std::string("wave"));
-	//State 3 : if there is a face and a circle detected -- draw a circle around each circle center and do a specific movement
+		//State 3 : if there is a face and a circle detected -- draw a circle around each circle center and do a specific movement
 		if (!circles.empty()) {
-			event.fire("saved arm right", std::string("bronchade"));
-			event.fire("saved arm left", std::string("bronchade"));
 			for (auto pos : circles) {
 				if (pos[2] > 1.0) {
 					circle(img, Point((int) pos[0], (int) pos[1]), 10, colors[0], 3, 8, 0);
@@ -102,7 +105,7 @@ void FaceDetection::detectAndDraw(ImageOf<PixelRgb> *point, Mat &img, CascadeCla
 			}
 		}
 	}
-	//State 4 : if there is noface but circle(s) detected -- draw circle around each center and look at the last circle detected
+		//State 4 : if there is noface but circle(s) detected -- draw circle around each center and look at the last circle detected
 	else if (!circles.empty()) {
 		Point center;
 		for (auto pos : circles) {
@@ -116,6 +119,10 @@ void FaceDetection::detectAndDraw(ImageOf<PixelRgb> *point, Mat &img, CascadeCla
 		event.fire("saved arm left", std::string("catch"));
 		event.fire("saved arm right", std::string("catch"));
 	}
+
+	// Create a port where we will load this information (detected faces) so after we can see it in a yarpview window
+	// We just made a change that for every pixel of rgb will point to the position in the img of opencv
+	// (vector of matrix used in openCV images).
 	ImageOf<PixelRgb> &tmp = facePort.prepare();
 	for (int x = 0; x < 320; ++x) {
 		for (int y = 0; y < 240; ++y) {

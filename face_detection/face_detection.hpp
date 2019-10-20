@@ -1,3 +1,5 @@
+//Created by Lucia
+
 #pragma once
 
 #include <opencv2/opencv.hpp>
@@ -12,8 +14,15 @@ using namespace std;
 using namespace cv;
 using namespace yarp::os;
 using namespace yarp::sig;
+
 //using namespace yarp::cv;
 //using namespace cv{using std::vector;}
+
+// Face detection code. Works using a trained algorithm by an xml file (obtained by the OpenCV libraries). 
+// Everytime a face appears in the video stream, this algortihm detects it and draws a circle in the center of the face.
+// (more explanation in the face_detection.cpp)
+
+
 
 class FaceDetection {
 public:
