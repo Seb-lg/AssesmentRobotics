@@ -72,15 +72,15 @@ void FaceDetection::detectAndDraw(ImageOf<PixelRgb> *point, Mat &img, CascadeCla
 	/**
 		Here is the state machine that determine which movement is done depending of the detections
 		Author : Pierre-Vincent (for the logical part)
-			 (for the movement call part and the drawing part)
+				 Sebastien (for the movement call part and the drawing part)
 	**/
-	//State 1 : if there is no face and no circle --look in front of it
+	//State 1 : if there is no face and no circle -- look in front of it
 	if (circles.empty() && faces.empty()) {
 		lookXPos = 320 / 2;
 		lookYPos = 240 / 2;
 		event.fire("look at position", (int) lookXPos, (int) lookYPos);
 	}
-		//State 2 : If a face is detected -- draw a circle for each face detected and look at the last face detected
+	//State 2 : If a face is detected -- draw a circle for each face detected and look at the last face detected
 	else if (!faces.empty()) {
 		//Draw Circle on the output image
 		Point center;
@@ -105,7 +105,7 @@ void FaceDetection::detectAndDraw(ImageOf<PixelRgb> *point, Mat &img, CascadeCla
 			}
 		}
 	}
-		//State 4 : if there is noface but circle(s) detected -- draw circle around each center and look at the last circle detected
+	//State 4 : if there is noface but circle(s) detected -- draw circle around each center and look at the last circle detected
 	else if (!circles.empty()) {
 		Point center;
 		for (auto pos : circles) {
@@ -144,17 +144,15 @@ void FaceDetection::detectAndDraw(ImageOf<PixelRgb> *point, Mat &img, CascadeCla
 	This function apply 2 filters on the image in order to make the detection possible and optimised.
 	Then call for the openCV function to detect circles based on the Hough algorithm
 **/
-cv::vector<cv::Vec3f> FaceDetection::detect_circle(Mat &image, double *xPos, double *yPos) {
-	cv::Mat img_gray;  // Declaration of an image which will be the gray image
+cv::vector<cv::Vec3f> FaceDetection::detect_circle(Mat& image, double *xPos, double *yPos){
+	cv::Mat img_gray; // Declaration of an image which will be the gray image 
 	cvtColor(image, img_gray, CV_BGR2GRAY); //Creation of the gray version of the image
-	GaussianBlur(img_gray, img_gray, cv::Size(1, 1), 2,
-		     2); //Blur the image to make the detection more easy (because in reality a circle can never be a mathematical perfect circle)
+        medianBlur(img_gray, img_gray, 3); //Blur the image to make the detection more easy (because in reality a circle can never be a mathematical perfect circle) 
 	cv::vector<cv::Vec3f> circles; //Creation of the vector in which every circles will be stored
-	cv::HoughCircles(img_gray, circles, CV_HOUGH_GRADIENT, 1, img_gray.rows / 8, 100, 50, 0,
-			 0); //Detection of the circle from the filtered image 130 and 65 can be adjusted (too big no detection, to small too much detection
-	if (!circles.empty()) { //modify the center of thefirst detected circle (not used anymore)
+	cv::HoughCircles(img_gray, circles, CV_HOUGH_GRADIENT,1,img_gray.rows/8,130,65,0,0); //Detection of the circle from the filtered image 130 and 65 can be adjusted (too big no detection, to small too much detection
+	if(!circles.empty()){ //modify the center of thefirst detected circle (not used anymore) 
 		*xPos = circles[0][0];
 		*yPos = circles[0][1];
 	}
-	return circles;
+  return circles;// return the function
 }
